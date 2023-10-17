@@ -15,12 +15,41 @@ from rest_framework.decorators import api_view
 from rest_framework import status, permissions, generics
 from rest_framework.response import Response 
 
-BASE_URL = "https://lekbeshimun.gov.np/"
+
+BASE_URL = "https://lekbeshimun.gov.np/alerts"
 
 # Create your views here.
 ## 
 ## 
 ##
+_today = DT.date.today()+DT.timedelta(days=2)
+_week_ago = _today - DT.timedelta(days=7)
+today = str(_today)
+lower = str(_week_ago)
+t = today.split("-")
+lo = lower.split("-")
+q = "?created[min]="+lo[1]+"%2F"+lo[2]+"%2F"+lo[0]+"&created[max]="+t[1]+"%2F"+t[2]+"%2F"+t[0]
+url  =  BASE_URL + q
+
+
+def checkUpdate():
+        response = requests.get(url,headers={'Connection':'close'})
+        data = response.json()
+        response.close()
+        #print('xxx')
+        if(len(data)>0):
+          #r =  sendPush()
+          #print(r)
+          pass
+        
+
+##Scheduler.
+
+sch = scheduler()
+sch.add_job(checkUpdate,'interval',seconds=30,max_instances=1)
+sch.start()
+
+    
 
 def default(request):
     
