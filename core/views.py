@@ -14,6 +14,8 @@ from knox.models import AuthToken
 from rest_framework.decorators import api_view
 from rest_framework import status, permissions, generics
 from rest_framework.response import Response 
+from fcm_django.models import FCMDevice
+
 
 
 BASE_URL = "https://lekbeshimun.gov.np/alerts"
@@ -38,7 +40,7 @@ def checkUpdate():
         response.close()
         #print('xxx')
         if(len(data)>0):
-          #r =  sendPush()
+          r =  sendPush()
           #print(r)
           pass
         
@@ -66,6 +68,23 @@ class RegisterAPI(generics.GenericAPIView):
         return Response({"user": UserSerializer(user,context = self.get_serializer_context()).data,
         "token":AuthToken.objects.create(user)[1]})
 
+    
+@api_view(['GET'])
+def registerDevice(request):
+    device=  FCMDevice()
+    device.name='xx'
+    device.active = True
+    device.device_id='dd'
+    device.registration_id = 'reg'
+    device.type='mob'
+    device.user_id = 1
+    device.save()
+
+
+
+
+
+
 @api_view(['GET'])
 def signup(request):
     serializer = UserSerializer(data = request.data)
@@ -85,5 +104,6 @@ def feedsAll(request):
     data = response.json()
     response.close()
     return Response(data)
+
 
     

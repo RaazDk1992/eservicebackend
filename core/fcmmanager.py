@@ -20,5 +20,4 @@ def sendPush():
     return r.response
 
     pass
-   
 

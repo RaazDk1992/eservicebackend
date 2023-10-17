@@ -7,5 +7,6 @@ urlpatterns = [
     path('signup',views.signup,name="signup"),
     path('register',views.RegisterAPI.as_view(),name="register"),
     path('articles',views.feedsAll,name="articles"),
+    path('registerdevice',views.registerDevice,name="devicereg"),
 
 ]
